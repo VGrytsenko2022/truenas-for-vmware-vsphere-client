@@ -94,6 +94,13 @@
             <artifactId>vaadin-testbench-junit5</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>com.vmware.tools</groupId>
+            <artifactId>extension-registration</artifactId>
+            <version>8.0.2.00000-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <build>

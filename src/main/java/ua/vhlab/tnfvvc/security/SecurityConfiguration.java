@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -21,13 +22,17 @@ public class SecurityConfiguration extends VaadinWebSecurity {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        http.headers(headers -> headers
+                .contentSecurityPolicy(csp -> csp
+                        .policyDirectives("frame-ancestors *"))
+                .frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)
+        );
 
-        http.authorizeHttpRequests(
-                authorize -> authorize.requestMatchers(new AntPathRequestMatcher("/images/*.png")).permitAll());
-
-        // Icons from the line-awesome addon
-        http.authorizeHttpRequests(authorize -> authorize
-                .requestMatchers(new AntPathRequestMatcher("/line-awesome/**/*.svg")).permitAll());
+        http.authorizeHttpRequests(authz -> authz
+                .requestMatchers(new AntPathRequestMatcher("/plugin-manifest.json")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/images/*.png")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/line-awesome/**/*.svg")).permitAll()
+        );
 
         super.configure(http);
         setLoginView(http, LoginView.class);
