@@ -9,6 +9,46 @@
             "url": "https://tnas.dit.lab/api/v2.0/system/info",
             "description": "TrueNAS System Info",
             "param": ""
+        },
+        {
+            "url": "https://tnas.dit.lab/api/v2.0/disk",
+            "description": "TrueNAS Disk Info",
+            "param": ""
+        },
+        {
+            "url": "https://tnas.dit.lab/api/v2.0/pool",
+            "description": "TrueNAS Pool Info",
+            "param": ""
+        },
+        {
+            "url": "https://tnas.dit.lab/api/v2.0/iscsi/target",
+            "description": "TrueNAS iSCSI Target Info",
+            "param": ""
+        },
+        {
+            "url": "https://tnas.dit.lab/api/v2.0/iscsi/extent",
+            "description": "TrueNAS iSCSI Extent Info",
+            "param": ""
+        },
+        {
+            "url": "https://tnas.dit.lab/api/v2.0/iscsi/targetextent",
+            "description": "TrueNAS iSCSI Targetextent Info",
+            "param": ""
+        },
+        {
+            "url": "https://tnas.dit.lab/api/v2.0/iscsi/portal",
+            "description": "TrueNAS iSCSI Portal Info",
+            "param": ""
+        },
+        {
+            "url": "https://tnas.dit.lab/api/v2.0/iscsi/initiator",
+            "description": "TrueNAS iSCSI Initiator Info",
+            "param": ""
+        },
+        {
+            "url": "https://tnas.dit.lab/api/v2.0/iscsi/global",
+            "description": "TrueNAS iSCSI Global Info",
+            "param": ""
         }
     ]
 }
