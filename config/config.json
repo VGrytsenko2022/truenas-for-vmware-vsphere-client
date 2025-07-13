@@ -1,0 +1,14 @@
+{
+    "truenas": {
+        "server": "tnas.dit.lab",
+        "login": "truenas_admin",
+        "hashedPassword": "T+ApCdcObn8H5/bwXhhAWMSDZRshdtV50ASIHBsHNso="
+    },
+    "dashboard": [
+        {
+            "url": "https://tnas.dit.lab/api/v2.0/system/info",
+            "description": "TrueNAS System Info",
+            "param": ""
+        }
+    ]
+}

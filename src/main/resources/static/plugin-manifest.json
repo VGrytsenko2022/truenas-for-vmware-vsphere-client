@@ -1,41 +1,55 @@
-
 {
-  "manifestVersion": "1.0.0",
-  "requirements": {
-    "plugin.api.version": "1.0.0"
-  },
-  "configuration": {
-    "nameKey": "plugin.name",
-    "icon": {
-      "name": "main"
-    }
-  },
-  "global": {
-    "view": {
-      "navigationId": "truenasDashboard",
-      "uri": "/indextest.html",
-      "navigationVisible": true
-    }
-  },
-  "definitions": {
-    "iconSpriteSheet": {
-      "uri": "images/PidginBird.png",
-      "definitions": {
-        "main": {
-          "x": 0,
-          "y": 64
-        }
-      }
+    "manifestVersion": "1.0.0",
+    "requirements": {
+        "plugin.api.version": "1.0.0",
+        "vsphere.client": {
+            "version": "[8.0.0,)",
+            "environments": [
+                "onprem"
+            ]
+        },
+        "vcenter.server": {
+            "version": "[8.0.0,)",
+            "environments": [
+                "onprem"
+            ]
+        },
+        "proxied.plugin.server.origin.api": "1.0.0",
+        "icon.sprite.sheet.theming": "1.0.0"
     },
-    "i18n": {
-      "locales": [
-        "en-US"
-      ],
-      "definitions": {
-        "plugin.name": {
-          "en-US": "TrueNAS Integration"
+    "configuration": {
+        "nameKey": "plugin.name",
+        "icon": {
+            "name": "main"
         }
-      }
+    },
+    "global": {
+        "view": {
+            "navigationId": "truenasDashboard",
+            "uri": "/",
+            "navigationVisible": true,
+            "isPublic": false
+        }
+    },
+    "definitions": {
+        "iconSpriteSheet": {
+            "uri": "images/PidginBird_32.png",
+            "definitions": {
+                "main": {
+                    "x": 0,
+                    "y": 0
+                }
+            }
+        },
+        "i18n": {
+            "locales": [
+                "en-US"
+            ],
+            "definitions": {
+                "plugin.name": {
+                    "en-US": "TrueNAS Integration"
+                }
+            }
+        }
     }
-  }
 }

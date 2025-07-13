@@ -1,14 +1,15 @@
 package ua.vhlab.tnfvvc.services;
 
-import java.util.Optional;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
+import java.util.List;
+
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+
 import ua.vhlab.tnfvvc.data.User;
 import ua.vhlab.tnfvvc.data.UserRepository;
 
 @Service
+@Component
 public class UserService {
 
     private final UserRepository repository;
@@ -17,28 +18,12 @@ public class UserService {
         this.repository = repository;
     }
 
-    public Optional<User> get(Long id) {
-        return repository.findById(id);
+    public void saveUsers(List<User> userList) {
+        repository.saveUsers(userList);
     }
 
-    public User save(User entity) {
-        return repository.save(entity);
-    }
-
-    public void delete(Long id) {
-        repository.deleteById(id);
-    }
-
-    public Page<User> list(Pageable pageable) {
-        return repository.findAll(pageable);
-    }
-
-    public Page<User> list(Pageable pageable, Specification<User> filter) {
-        return repository.findAll(filter, pageable);
-    }
-
-    public int count() {
-        return (int) repository.count();
+    public List<User> list() {
+        return repository.findAll();
     }
 
 }

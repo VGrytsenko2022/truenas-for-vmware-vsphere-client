@@ -24,7 +24,7 @@ public class SecurityConfiguration extends VaadinWebSecurity {
     protected void configure(HttpSecurity http) throws Exception {
         http.headers(headers -> headers
                 .contentSecurityPolicy(csp -> csp
-                        .policyDirectives("frame-ancestors *"))
+                .policyDirectives("frame-ancestors *"))
                 .frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)
         );
 

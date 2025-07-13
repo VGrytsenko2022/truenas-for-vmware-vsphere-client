@@ -28,6 +28,9 @@ public class Application implements AppShellConfigurator {
     public static void main(String[] args) throws UnknownHostException {
         SpringApplication.run(Application.class, args);
         String ip = InetAddress.getLocalHost().getHostAddress();
-        System.out.println("Application running at: https://" + ip + ":8443/");
+        System.out.println("Application running at: https://" + ip + ":443/");
+        String fqdn = InetAddress.getLocalHost().getCanonicalHostName();
+        System.out.println("Application running at: https://" + fqdn + ":443/");
     }
+
 }

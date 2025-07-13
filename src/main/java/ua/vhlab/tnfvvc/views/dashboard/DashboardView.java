@@ -1,138 +1,89 @@
 package ua.vhlab.tnfvvc.views.dashboard;
 
 import com.vaadin.flow.component.Composite;
-import com.vaadin.flow.component.html.Paragraph;
+import com.vaadin.flow.component.DetachEvent;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
-import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
-import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.tabs.TabSheet;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.server.auth.AnonymousAllowed;
-import com.vaadin.flow.theme.lumo.LumoUtility.Gap;
-import com.vaadin.flow.theme.lumo.LumoUtility.Padding;
+import com.vaadin.flow.theme.lumo.LumoUtility;
+import jakarta.annotation.security.PermitAll;
+import org.springframework.web.client.RestTemplate;
 import org.vaadin.lineawesome.LineAwesomeIconUrl;
+import ua.vhlab.tnfvvc.data.config.DashboardConfig;
+import ua.vhlab.tnfvvc.services.ConfigService;
+import ua.vhlab.tnfvvc.services.DashboardViewUpdateService;
+
+import java.util.List;
+
+import static com.vaadin.hilla.ApplicationContextProvider.getApplicationContext;
 
 @PageTitle("Dashboard")
 @Route("")
 @Menu(order = 0, icon = LineAwesomeIconUrl.FILE_MEDICAL_ALT_SOLID)
-@AnonymousAllowed
+@PermitAll
+
 public class DashboardView extends Composite<VerticalLayout> {
 
-    public DashboardView() {
-        HorizontalLayout layoutRow = new HorizontalLayout();
-        Paragraph textMedium = new Paragraph();
-        Paragraph textSmall = new Paragraph();
-        VerticalLayout layoutColumn2 = new VerticalLayout();
-        HorizontalLayout layoutRow2 = new HorizontalLayout();
-        Paragraph textMedium2 = new Paragraph();
-        Paragraph textSmall2 = new Paragraph();
-        HorizontalLayout layoutRow3 = new HorizontalLayout();
-        Paragraph textMedium3 = new Paragraph();
-        Paragraph textSmall3 = new Paragraph();
-        HorizontalLayout layoutRow4 = new HorizontalLayout();
-        Paragraph textMedium4 = new Paragraph();
-        Paragraph textSmall4 = new Paragraph();
-        HorizontalLayout layoutRow5 = new HorizontalLayout();
-        Paragraph textMedium5 = new Paragraph();
-        Paragraph textSmall5 = new Paragraph();
-        getContent().addClassName(Gap.SMALL);
-        getContent().addClassName(Padding.SMALL);
-        getContent().setWidth("100%");
-        getContent().getStyle().set("flex-grow", "1");
-        layoutRow.setWidthFull();
-        getContent().setFlexGrow(1.0, layoutRow);
-        layoutRow.addClassName(Gap.SMALL);
-        layoutRow.setWidth("100%");
-        layoutRow.setHeight("35px");
-        layoutRow.setAlignItems(Alignment.START);
-        layoutRow.setJustifyContentMode(JustifyContentMode.CENTER);
-        textMedium.setText("Welcome:");
-        layoutRow.setAlignSelf(FlexComponent.Alignment.START, textMedium);
-        textMedium.setWidth("max-content");
-        textMedium.getStyle().set("font-size", "var(--lumo-font-size-m)");
-        textSmall.setText("...");
-        textSmall.setWidth("100%");
-        textSmall.getStyle().set("font-size", "var(--lumo-font-size-xs)");
-        layoutColumn2.setWidthFull();
-        getContent().setFlexGrow(1.0, layoutColumn2);
-        layoutColumn2.addClassName(Gap.SMALL);
-        layoutColumn2.addClassName(Padding.SMALL);
-        layoutColumn2.setWidth("100%");
-        layoutColumn2.getStyle().set("flex-grow", "1");
-        layoutRow2.setWidthFull();
-        layoutColumn2.setFlexGrow(1.0, layoutRow2);
-        layoutRow2.addClassName(Gap.SMALL);
-        layoutRow2.setWidth("100%");
-        layoutRow2.setHeight("35px");
-        layoutRow2.setAlignItems(Alignment.START);
-        layoutRow2.setJustifyContentMode(JustifyContentMode.CENTER);
-        textMedium2.setText("Welcome:");
-        layoutRow2.setAlignSelf(FlexComponent.Alignment.START, textMedium2);
-        textMedium2.setWidth("max-content");
-        textMedium2.getStyle().set("font-size", "var(--lumo-font-size-m)");
-        textSmall2.setText("...");
-        textSmall2.setWidth("100%");
-        textSmall2.getStyle().set("font-size", "var(--lumo-font-size-xs)");
-        layoutRow3.setWidthFull();
-        layoutColumn2.setFlexGrow(1.0, layoutRow3);
-        layoutRow3.addClassName(Gap.SMALL);
-        layoutRow3.setWidth("100%");
-        layoutRow3.setHeight("35px");
-        layoutRow3.setAlignItems(Alignment.START);
-        layoutRow3.setJustifyContentMode(JustifyContentMode.CENTER);
-        textMedium3.setText("Welcome:");
-        layoutRow3.setAlignSelf(FlexComponent.Alignment.START, textMedium3);
-        textMedium3.setWidth("max-content");
-        textMedium3.getStyle().set("font-size", "var(--lumo-font-size-m)");
-        textSmall3.setText("...");
-        textSmall3.setWidth("100%");
-        textSmall3.getStyle().set("font-size", "var(--lumo-font-size-xs)");
-        layoutRow4.setWidthFull();
-        layoutColumn2.setFlexGrow(1.0, layoutRow4);
-        layoutRow4.addClassName(Gap.SMALL);
-        layoutRow4.setWidth("100%");
-        layoutRow4.setHeight("35px");
-        layoutRow4.setAlignItems(Alignment.START);
-        layoutRow4.setJustifyContentMode(JustifyContentMode.CENTER);
-        textMedium4.setText("Welcome:");
-        layoutRow4.setAlignSelf(FlexComponent.Alignment.START, textMedium4);
-        textMedium4.setWidth("max-content");
-        textMedium4.getStyle().set("font-size", "var(--lumo-font-size-m)");
-        textSmall4.setText("...");
-        textSmall4.setWidth("100%");
-        textSmall4.getStyle().set("font-size", "var(--lumo-font-size-xs)");
-        layoutRow5.setWidthFull();
-        layoutColumn2.setFlexGrow(1.0, layoutRow5);
-        layoutRow5.addClassName(Gap.SMALL);
-        layoutRow5.setWidth("100%");
-        layoutRow5.setHeight("35px");
-        layoutRow5.setAlignItems(Alignment.START);
-        layoutRow5.setJustifyContentMode(JustifyContentMode.CENTER);
-        textMedium5.setText("Welcome:");
-        layoutRow5.setAlignSelf(FlexComponent.Alignment.START, textMedium5);
-        textMedium5.setWidth("max-content");
-        textMedium5.getStyle().set("font-size", "var(--lumo-font-size-m)");
-        textSmall5.setText("...");
-        textSmall5.setWidth("100%");
-        textSmall5.getStyle().set("font-size", "var(--lumo-font-size-xs)");
-        getContent().add(layoutRow);
-        layoutRow.add(textMedium);
-        layoutRow.add(textSmall);
-        getContent().add(layoutColumn2);
-        layoutColumn2.add(layoutRow2);
-        layoutRow2.add(textMedium2);
-        layoutRow2.add(textSmall2);
-        layoutColumn2.add(layoutRow3);
-        layoutRow3.add(textMedium3);
-        layoutRow3.add(textSmall3);
-        layoutColumn2.add(layoutRow4);
-        layoutRow4.add(textMedium4);
-        layoutRow4.add(textSmall4);
-        layoutColumn2.add(layoutRow5);
-        layoutRow5.add(textMedium5);
-        layoutRow5.add(textSmall5);
+    private final Runnable refreshCallback;
+    private final ConfigService service;
+    private final TabSheet tabSheet = new TabSheet();
+    private final RestTemplate restTemplate;
+
+    public DashboardView(ConfigService service, DashboardViewUpdateService dashboardViewUpdateService, RestTemplate restTemplate) {
+        this.service = service;
+        this.restTemplate = restTemplate;
+        VerticalLayout layout = getContent();
+        layout.setSizeFull(); // ← ВАЖЛИВО!
+        layout.addClassName(LumoUtility.Gap.SMALL);
+        layout.addClassName(LumoUtility.Padding.SMALL);
+        layout.setJustifyContentMode(FlexComponent.JustifyContentMode.START);
+        layout.setAlignItems(FlexComponent.Alignment.STRETCH); // ← Виправлено
+        layout.getStyle().set("border", "1px solid lightgray");
+        layout.getStyle().set("border-radius", "8px"); // необов’язково — скруглення
+        layout.getStyle().set("padding", "10px"); // всередині відступ
+        layout.getStyle().set("margin", "10px"); // зовнішній відступ
+
+        tabSheet.setSizeFull();
+        tabSheet.addClassName(LumoUtility.Gap.SMALL);
+        tabSheet.addClassName(LumoUtility.Padding.MEDIUM);
+        getContent().add(tabSheet);
+        refresh();
+
+        refreshCallback = () -> {
+            UI ui = getUI().orElse(null);
+            if (ui != null) {
+                ui.access(this::refresh);
+            }
+        };
+
+        dashboardViewUpdateService.registerListener(refreshCallback);
+
     }
+
+    private void refresh() {
+
+        tabSheet.getChildren().forEach(component -> {
+            // Делай что нужно с каждым component
+            tabSheet.remove(component);
+        });
+        List<DashboardConfig> dashboardConfigs = service.getDashboardConfig();
+        for (DashboardConfig dashboardConfig : dashboardConfigs) {
+            //System.out.println("Dashboard config: >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> " + dashboardConfig.getDescription());
+            // dashboard.add(new DashboardWidgetView(dashboardConfig,service.getTrueNASConfig(),restTemplate));
+            tabSheet.add(dashboardConfig.getDescription(), new DashboardWidgetView(dashboardConfig, service.getTrueNASConfig(), restTemplate));
+
+        }
+        UI.getCurrent().push();
+    }
+
+    @Override
+    protected void onDetach(DetachEvent detachEvent) {
+        DashboardViewUpdateService ds = getApplicationContext().getBean(DashboardViewUpdateService.class);
+        ds.unregisterListener(refreshCallback);
+    }
+
 }

@@ -1,0 +1,24 @@
+{
+    "truenas": {
+        "server": "truenas.example.com",
+        "login": "truenas_admin",
+        "hashedPassword": ""
+    },
+    "dashboard": [
+        {
+            "url": "https://grafana.example.com/d/abc123",
+            "description": "Завантаження CPU",
+            "param": "cpu=all"
+        },
+        {
+            "url": "https://grafana.example.com/d/xyz456",
+            "description": "Використання памʼяті",
+            "param": "mem=used"
+        },
+        {
+            "url": "https://grafana.example.com/d/uvw789",
+            "description": "Трафік мережі",
+            "param": "net=eth0"
+        }
+    ]
+}

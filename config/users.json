@@ -1,0 +1,20 @@
+[
+    {
+        "username": "admin",
+        "name": "Administrator",
+        "hashedPassword": "$2a$10$yMXwWvNLN.QxSxDwP183yuzFXUfxCv9icrIoLI/uAFIAztHMtnpcW",
+        "profilePicture": "",
+        "roles": [
+            "ADMIN"
+        ]
+    },
+    {
+        "username": "user",
+        "name": "User",
+        "hashedPassword": "$2a$10$yMXwWvNLN.QxSxDwP183yuzFXUfxCv9icrIoLI/uAFIAztHMtnpcW",
+        "profilePicture": "",
+        "roles": [
+            "USER"
+        ]
+    }
+]

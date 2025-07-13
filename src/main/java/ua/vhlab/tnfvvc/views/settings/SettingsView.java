@@ -1,21 +1,16 @@
 package ua.vhlab.tnfvvc.views.settings;
 
 import com.vaadin.flow.component.Composite;
-import com.vaadin.flow.component.UI;
-import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.tabs.Tab;
-import com.vaadin.flow.component.tabs.Tabs;
-import com.vaadin.flow.component.textfield.PasswordField;
-import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.router.Menu;
+import com.vaadin.flow.component.tabs.TabSheet;
+import com.vaadin.flow.component.tabs.TabSheetVariant;
+import com.vaadin.flow.router.*;
+import com.vaadin.flow.theme.lumo.LumoUtility;
+import org.springframework.beans.factory.ObjectProvider;
+import jakarta.annotation.security.RolesAllowed;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.theme.lumo.LumoUtility.Gap;
-import com.vaadin.flow.theme.lumo.LumoUtility.Padding;
-import jakarta.annotation.security.RolesAllowed;
 import org.vaadin.lineawesome.LineAwesomeIconUrl;
 
 @PageTitle("Settings")
@@ -23,35 +18,27 @@ import org.vaadin.lineawesome.LineAwesomeIconUrl;
 @Menu(order = 1, icon = LineAwesomeIconUrl.PENCIL_RULER_SOLID)
 @RolesAllowed("ADMIN")
 public class SettingsView extends Composite<VerticalLayout> {
-    Tab plugin =new Tab("Plugin");
-    Tab payment =new Tab("Payment");
-    Tab shipping =new Tab("Shipping");
-    PluginView pluginView = new PluginView();
-    VerticalLayout layoutColumn2 = new VerticalLayout();
-    public SettingsView() {
 
-        Tabs tabs = new Tabs();
-        setTabsSampleData(tabs);
-        tabs.addSelectedChangeListener(
-                event -> setContent(event.getSelectedTab()));
-        getContent().add(tabs);
-        layoutColumn2.add(pluginView);
-        getContent().add(layoutColumn2);
+    public SettingsView(ObjectProvider<PluginView> pluginViewProvider,
+            ObjectProvider<UserView> userViewProvider,
+            ObjectProvider<TrueNASView> trueNASViewProvider) {
+        VerticalLayout layout = getContent();
+        layout.setSizeFull();
+        layout.addClassName(LumoUtility.Gap.SMALL);
+        layout.addClassName(LumoUtility.Padding.MEDIUM);
+        layout.setJustifyContentMode(FlexComponent.JustifyContentMode.START);
+        layout.setAlignItems(FlexComponent.Alignment.STRETCH);
 
-    }
-    private void setTabsSampleData(Tabs tabs) {
-        tabs.add(plugin);
-        tabs.add(payment);
-        tabs.add(shipping);
-    }
-    private void setContent(Tab tab) {
-        var ui = UI.getCurrent();
-        ui.access(() -> {
-            layoutColumn2.removeAll();
-            if (tab.equals(plugin)) {
-                layoutColumn2.add(pluginView);
-            }
-            ui.push();
-        });
+        TabSheet tabSheet = new TabSheet();
+        tabSheet.setSizeFull();
+        tabSheet.addClassName(LumoUtility.Gap.SMALL);
+        tabSheet.addClassName(LumoUtility.Padding.MEDIUM);
+
+        tabSheet.add("Plugin", pluginViewProvider.getObject());
+        tabSheet.add("Users", userViewProvider.getObject());
+        tabSheet.add("TrueNAS", trueNASViewProvider.getObject());
+
+        tabSheet.addThemeVariants(TabSheetVariant.LUMO_BORDERED);
+        getContent().add(tabSheet);
     }
 }
