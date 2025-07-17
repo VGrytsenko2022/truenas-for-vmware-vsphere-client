@@ -76,7 +76,10 @@ public class ISCSITargetManageView extends Composite<VerticalLayout> {
         buttonAdd.addClickListener(e -> addISCSITarget());
 
         treeGrid.setWidthFull();
-        treeGrid.addHierarchyColumn(ds -> "[" + ds.type + "] " + ds.name).setHeader("Dataset");
+        treeGrid.addHierarchyColumn(ds -> "[" + ds.type + "] " + ds.name).setHeader("Dataset")
+                .setWidth("300px")
+                .setFlexGrow(0)
+                .setResizable(true);
 
         treeGrid.addColumn(ds -> {
             try {
