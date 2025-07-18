@@ -41,10 +41,12 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
+import org.springframework.context.annotation.Scope;
 
 @PageTitle("iSCSI Target Manage")
 @Route("iSCSITargetManage")
 @Menu(order = 2, icon = LineAwesomeIconUrl.ANCHOR_SOLID)
+@Scope("prototype")
 @RolesAllowed("ADMIN")
 public class ISCSITargetManageView extends Composite<VerticalLayout> {
 

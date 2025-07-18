@@ -1,6 +1,8 @@
 package ua.vhlab.tnfvvc.views.settings;
 
+import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Composite;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
@@ -26,7 +28,6 @@ import ua.vhlab.tnfvvc.data.User;
 import ua.vhlab.tnfvvc.services.UserService;
 import ua.vhlab.tnfvvc.data.Role;
 import java.util.List;
-
 import java.util.Set;
 
 @RolesAllowed("ADMIN")
@@ -35,88 +36,72 @@ import java.util.Set;
 public class UserView extends Composite<VerticalLayout> {
 
     private final Grid<User> grid = new Grid<>(User.class, false);
-
     private final UserService service;
-
     private final TextField userNameField = new TextField("Username");
     private final TextField nameField = new TextField("Name");
     private final PasswordField passwordField = new PasswordField("Password");
     private final PasswordField changePasswordField = new PasswordField("Password");
     private final RadioButtonGroup<String> radioGroup = new RadioButtonGroup<>();
+    private UI ui = UI.getCurrent();
 
     public UserView(UserService service) {
         this.service = service;
         VerticalLayout layout = getContent();
-        layout.setSizeFull(); // ← ВАЖЛИВО!
-        layout.addClassName(Gap.SMALL);
-        layout.addClassName(Padding.SMALL);
-        layout.setJustifyContentMode(FlexComponent.JustifyContentMode.START);
-        layout.setAlignItems(Alignment.STRETCH); // ← Виправлено
-        layout.getStyle().set("border", "1px solid lightgray");
-        layout.getStyle().set("border-radius", "8px"); // необов’язково — скруглення
-        layout.getStyle().set("padding", "10px"); // всередині відступ
-        layout.getStyle().set("margin", "10px"); // зовнішній відступ
+        styleMainLayout(layout);
 
         Button buttonAdd = new Button("Add");
-        buttonAdd.setWidth("min-content");
+        buttonAdd.getStyle().set("width", "min-content");
         buttonAdd.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
-        grid.setSizeFull(); // ← ВАЖЛИВО!
-        grid.addColumn(User::getUsername).setHeader("Username");
-        grid.addColumn(User::getName).setHeader("Name");
-        grid.addColumn(user
-                -> user.getRoles() == null ? ""
-                : String.join(", ", user.getRoles().stream().map(Role::name).toList())
-        ).setHeader("Roles");
-
-        grid.addColumn(
-                new ComponentRenderer<>(Button::new, (button, person) -> {
-                    button.addThemeVariants(ButtonVariant.LUMO_ICON,
-                            ButtonVariant.LUMO_ERROR,
-                            ButtonVariant.LUMO_TERTIARY);
-                    button.addClickListener(e -> removeUser(person));
-                    button.setIcon(new Icon(VaadinIcon.TRASH));
-                })
-        ).setHeader("Manage");
-        grid.addColumn(
-                new ComponentRenderer<>(Button::new, (button, person) -> {
-                    button.addThemeVariants(ButtonVariant.LUMO_ICON,
-                            ButtonVariant.LUMO_ERROR,
-                            ButtonVariant.LUMO_TERTIARY);
-                    button.addClickListener(e -> changePassword(person));
-                    button.setIcon(new Icon(VaadinIcon.KEY));
-                })
-        ).setHeader("Set password");
+        configureGrid();
 
         layout.add(buttonAdd, grid);
-        layout.expand(grid); // ← дозволяє grid зайняти решту простору
-        grid.setItems(service.list());
+        layout.expand(grid);
 
         Dialog createUserDialog = new Dialog();
         createUserDialog.setHeaderTitle("New user");
-        VerticalLayout createUserDialogLayout = createUserDialogLayout();
-        createUserDialog.add(createUserDialogLayout);
-        Button saveButtonCreateUser = createSaveButton(createUserDialog);
-        Button cancelButtonCreateUser = new Button("Cancel", e -> createUserDialog.close());
-        createUserDialog.getFooter().add(cancelButtonCreateUser);
-        createUserDialog.getFooter().add(saveButtonCreateUser);
+        createUserDialog.add(createUserDialogLayout());
+        createUserDialog.getFooter().add(new Button("Cancel", e -> createUserDialog.close()));
+        createUserDialog.getFooter().add(createSaveButton(createUserDialog));
 
-        buttonAdd.addSingleClickListener(user -> {
-            createUserDialog.open();
-        });
-
+        buttonAdd.addClickListener(user -> createUserDialog.open());
     }
 
-    private void changePassword(User person) {
+    @Override
+    protected void onAttach(AttachEvent event) {
+        ui = event.getUI();
+        // Тепер це гарантовано valid UI
+    }
+
+    private void configureGrid() {
+        grid.setSizeFull();
+        grid.addColumn(User::getUsername).setHeader("Username");
+        grid.addColumn(User::getName).setHeader("Name");
+        grid.addColumn(user -> user.getRoles() == null ? ""
+                : String.join(", ", user.getRoles().stream().map(Role::name).toList()))
+                .setHeader("Roles");
+
+        grid.addColumn(new ComponentRenderer<>(Button::new, (button, person) -> {
+            button.setIcon(new Icon(VaadinIcon.TRASH));
+            button.addThemeVariants(ButtonVariant.LUMO_ICON, ButtonVariant.LUMO_ERROR, ButtonVariant.LUMO_TERTIARY);
+            button.addClickListener(e -> removeUser(person));
+        })).setHeader("Manage");
+
+        grid.addColumn(new ComponentRenderer<>(Button::new, (button, person) -> {
+            button.setIcon(new Icon(VaadinIcon.KEY));
+            button.addThemeVariants(ButtonVariant.LUMO_ICON, ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_TERTIARY);
+            button.addClickListener(e -> openChangePasswordDialog(person));
+        })).setHeader("Set password");
+
+        grid.setItems(service.list());
+    }
+
+    private void openChangePasswordDialog(User person) {
         Dialog changePasswordDialog = new Dialog();
         changePasswordDialog.setHeaderTitle("New password");
-        VerticalLayout changePasswordLayout = changePasswordLayout();
-        changePasswordDialog.add(changePasswordLayout);
-        Button saveButtonChangePassword = passwordSaveButton(changePasswordDialog, person);
-        Button cancelButtonChangePassword = new Button("Cancel", e -> changePasswordDialog.close());
-        changePasswordDialog.getFooter().add(cancelButtonChangePassword);
-        changePasswordDialog.getFooter().add(saveButtonChangePassword);
-
+        changePasswordDialog.add(changePasswordLayout());
+        changePasswordDialog.getFooter().add(new Button("Cancel", e -> changePasswordDialog.close()));
+        changePasswordDialog.getFooter().add(passwordSaveButton(changePasswordDialog, person));
         changePasswordDialog.open();
     }
 
@@ -124,7 +109,7 @@ public class UserView extends Composite<VerticalLayout> {
         VerticalLayout dialogLayout = new VerticalLayout(changePasswordField);
         dialogLayout.setPadding(false);
         dialogLayout.setSpacing(false);
-        dialogLayout.setAlignItems(FlexComponent.Alignment.STRETCH);
+        dialogLayout.setAlignItems(Alignment.STRETCH);
         dialogLayout.getStyle().set("width", "18rem").set("max-width", "100%");
         return dialogLayout;
     }
@@ -137,57 +122,88 @@ public class UserView extends Composite<VerticalLayout> {
         VerticalLayout dialogLayout = new VerticalLayout(userNameField, nameField, passwordField, radioGroup);
         dialogLayout.setPadding(false);
         dialogLayout.setSpacing(false);
-        dialogLayout.setAlignItems(FlexComponent.Alignment.STRETCH);
+        dialogLayout.setAlignItems(Alignment.STRETCH);
         dialogLayout.getStyle().set("width", "18rem").set("max-width", "100%");
         return dialogLayout;
     }
 
     private Button passwordSaveButton(Dialog dialog, User person) {
         Button saveButton = new Button("Save", e -> {
-            person.setHashedPassword(changePasswordField.getValue());
-            List<User> users = service.list();
-            service.saveUsers(users);
-            refreshGrid();
-            dialog.close();
+
+            if (ui != null && ui.isAttached()) {
+                ui.access(() -> {
+                    person.setHashedPassword(changePasswordField.getValue());
+                    service.saveUsers(service.list());
+                    refreshGrid();
+                    dialog.close();
+                    if (ui.isAttached()) {
+                        ui.push();
+                    }
+                });
+            }
         });
         saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-
         return saveButton;
     }
 
     private Button createSaveButton(Dialog dialog) {
         Button saveButton = new Button("Add", e -> {
-
-            Set<Role> roles = radioGroup.getValue() != null
-                    ? Set.of(Role.valueOf(radioGroup.getValue()))
-                    : Set.of(); // або Set.of(Role.USER) як значення за замовчуванням
-            List<User> users = service.list();
-            User user = new User(userNameField.getValue(), nameField.getValue(), passwordField.getValue(), roles, null);
-            users.add(user);
-
-            service.saveUsers(users);
-            refreshGrid();
-            dialog.close();
+            if (ui != null && ui.isAttached()) {
+                ui.access(() -> {
+                    Set<Role> roles = radioGroup.getValue() != null
+                            ? Set.of(Role.valueOf(radioGroup.getValue())) : Set.of();
+                    List<User> users = service.list();
+                    User user = new User(userNameField.getValue(), nameField.getValue(), passwordField.getValue(), roles, null);
+                    users.add(user);
+                    service.saveUsers(users);
+                    refreshGrid();
+                    dialog.close();
+                    if (ui.isAttached()) {
+                        ui.push();
+                    }
+                });
+            }
         });
         saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-
         return saveButton;
     }
 
     private void removeUser(User person) {
-
-        if (person.getUsername().equals("admin")) {
-            Notification.show("User \"admin\" cannot be deleted!", 5000, Notification.Position.MIDDLE).addThemeVariants(NotificationVariant.LUMO_ERROR);
+        if ("admin".equals(person.getUsername())) {
+            Notification.show("User \"admin\" cannot be deleted!", 5000, Notification.Position.MIDDLE)
+                    .addThemeVariants(NotificationVariant.LUMO_ERROR);
         } else {
-            List<User> users = service.list();
-            users.remove(person);
-            service.saveUsers(users);
-            refreshGrid();
+            if (ui != null && ui.isAttached()) {
+                ui.access(() -> {
+                    List<User> users = service.list();
+                    users.remove(person);
+                    service.saveUsers(users);
+                    refreshGrid();
+                    if (ui.isAttached()) {
+                        ui.push();
+                    }
+                });
+            }
         }
     }
 
     private void refreshGrid() {
-        List<User> users = service.list();
-        grid.setItems(users);
+        grid.setItems(service.list());
+    }
+
+    private void styleMainLayout(VerticalLayout layout) {
+        layout.setSizeFull();
+        layout.addClassNames(Gap.SMALL, Padding.SMALL);
+        layout.setJustifyContentMode(FlexComponent.JustifyContentMode.START);
+        layout.setAlignItems(Alignment.STRETCH);
+        layout.getStyle()
+                .set("border", "1px solid lightgray")
+                .set("border-radius", "8px")
+                .set("padding", "10px")
+                .set("margin", "10px");
+    }
+
+    void onTabActivated() {
+  
     }
 }

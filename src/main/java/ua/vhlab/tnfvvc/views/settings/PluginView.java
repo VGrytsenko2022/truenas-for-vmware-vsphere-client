@@ -122,4 +122,8 @@ public class PluginView extends Composite<VerticalLayout> {
             }
         });
     }
+
+    void onTabActivated() {
+       
+    }
 }
