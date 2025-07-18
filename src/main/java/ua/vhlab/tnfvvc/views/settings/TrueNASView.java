@@ -1,7 +1,6 @@
 package ua.vhlab.tnfvvc.views.settings;
 
 import com.vaadin.flow.component.Composite;
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dialog.Dialog;

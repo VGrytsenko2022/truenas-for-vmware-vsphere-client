@@ -1,6 +1,5 @@
 package ua.vhlab.tnfvvc.views.settings;
 
-import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
