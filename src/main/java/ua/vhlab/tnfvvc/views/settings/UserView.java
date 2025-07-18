@@ -148,20 +148,25 @@ public class UserView extends Composite<VerticalLayout> {
 
     private Button createSaveButton(Dialog dialog) {
         Button saveButton = new Button("Add", e -> {
-            if (ui != null && ui.isAttached()) {
-                ui.access(() -> {
-                    Set<Role> roles = radioGroup.getValue() != null
-                            ? Set.of(Role.valueOf(radioGroup.getValue())) : Set.of();
-                    List<User> users = service.list();
-                    User user = new User(userNameField.getValue(), nameField.getValue(), passwordField.getValue(), roles, null);
-                    users.add(user);
-                    service.saveUsers(users);
-                    refreshGrid();
-                    dialog.close();
-                    if (ui.isAttached()) {
-                        ui.push();
-                    }
-                });
+            if (!userNameField.getValue().contains("admin")) {
+                if (ui != null && ui.isAttached()) {
+                    ui.access(() -> {
+                        Set<Role> roles = radioGroup.getValue() != null
+                                ? Set.of(Role.valueOf(radioGroup.getValue())) : Set.of();
+                        List<User> users = service.list();
+                        User user = new User(userNameField.getValue(), nameField.getValue(), passwordField.getValue(), roles, null);
+                        users.add(user);
+                        service.saveUsers(users);
+                        refreshGrid();
+                        dialog.close();
+                        if (ui.isAttached()) {
+                            ui.push();
+                        }
+                    });
+                }
+            } else {
+                Notification.show("User \"admin\" already exists!", 5000, Notification.Position.MIDDLE)
+                        .addThemeVariants(NotificationVariant.LUMO_ERROR);
             }
         });
         saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
@@ -204,6 +209,6 @@ public class UserView extends Composite<VerticalLayout> {
     }
 
     void onTabActivated() {
-  
+
     }
 }
